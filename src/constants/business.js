@@ -12,8 +12,8 @@ module.exports = {
 
   // 用户状态
   USER_STATUS: {
-    ACTIVE: 'active',
-    INACTIVE: 'inactive',
+    ACTIVE: 1, // 正常
+    INACTIVE: 2, // 冻结
     SUSPENDED: 'suspended',
     DELETED: 'deleted',
   },

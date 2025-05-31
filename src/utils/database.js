@@ -8,7 +8,13 @@ const config = require('../config');
 const { DATABASE_TYPES } = require('../constants/business');
 
 // 导入数据库模型
-const UserModel = require('../models/user');
+const SysUserModel = require('../models/sysUser');
+const SysRoleModel = require('../models/sysRole');
+const SysPermissionModel = require('../models/sysPermission');
+const SysUserRoleModel = require('../models/sysUserRole');
+const SysRolePermissionModel = require('../models/sysRolePermission');
+const SysDepartModel = require('../models/sysDepart');
+const SysUserDepartModel = require('../models/sysUserDepart');
 
 // 数据库连接对象
 const connections = {};
@@ -168,7 +174,13 @@ async function initDMConnection() {
 function initModels(sequelize) {
   // 初始化模型
   const models = {
-    User: UserModel(sequelize),
+    User: SysUserModel(sequelize),
+    Role: SysRoleModel(sequelize),
+    Permission: SysPermissionModel(sequelize),
+    UserRole: SysUserRoleModel(sequelize),
+    RolePermission: SysRolePermissionModel(sequelize),
+    Depart: SysDepartModel(sequelize),
+    UserDepart: SysUserDepartModel(sequelize),
     // 在此处添加其他模型
   };
 

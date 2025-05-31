@@ -4,14 +4,21 @@
   "description": "高性能、可维护、可扩展的基于Express.js的企业级Web服务器框架",
   "main": "src/index.js",
   "scripts": {
-    "start": "pm2 start dist/index.js -i max --no-daemon",
-    "dev": "nodemon --watch src -r dotenv/config src/index.js",
-    "debug": "node --inspect-brk -r dotenv/config src/index.js",
-    "build": "babel src -d dist",
+    "start": "cross-env NODE_ENV=production pm2 start src/index.js -i max --name \"webserver-prod\"",
+    "start:dev": "cross-env NODE_ENV=development node src/index.js",
+    "start:test": "cross-env NODE_ENV=test node src/index.js",
+    "dev": "cross-env NODE_ENV=development nodemon --watch src src/index.js",
+    "test": "cross-env NODE_ENV=test jest",
+    "test:coverage": "cross-env NODE_ENV=test jest --coverage",
     "lint": "eslint . --ext .js",
     "format": "prettier --write src/**/*.js",
-    "test": "jest",
-    "doc": "node -e \"require('./src/config/swagger')\""
+    "build": "babel src -d dist",
+    "build:prod": "cross-env NODE_ENV=production babel src -d dist",
+    "doc": "node -e \"require('./src/config/swagger')\"",
+    "debug": "cross-env NODE_ENV=development node --inspect-brk src/index.js",
+    "debug:test": "cross-env NODE_ENV=test node --inspect-brk src/index.js",
+    "cluster:dev": "cross-env NODE_ENV=development CLUSTER_ENABLED=true node src/index.js",
+    "cluster:test": "cross-env NODE_ENV=test CLUSTER_ENABLED=true node src/index.js"
   },
   "keywords": [
     "express",
@@ -37,16 +44,17 @@
     "mysql2": "^3.6.2",
     "oracledb": "^6.2.0",
     "pg": "^8.11.3",
+    "pm2": "^5.3.0",
     "sequelize": "^6.33.0",
-    "winston": "^3.11.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
-    "pm2": "^5.3.0"
+    "winston": "^3.11.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.23.0",
     "@babel/core": "^7.23.2",
     "@babel/preset-env": "^7.23.2",
+    "cross-env": "^7.0.3",
     "eslint": "^8.52.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",
@@ -55,4 +63,4 @@
     "prettier": "^3.0.3",
     "supertest": "^6.3.3"
   }
-} 
+}

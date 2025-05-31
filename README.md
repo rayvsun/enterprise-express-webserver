@@ -23,11 +23,99 @@ git clone [项目地址]
 npm install
 
 # 配置环境变量
-cp .env.example .env
-# 编辑.env文件，配置数据库等信息
+cp .env.example .env.development
+# 编辑.env.development文件，配置开发环境数据库等信息
 
 # 启动开发环境
 npm run dev
+```
+
+## 环境配置
+
+本项目支持多环境配置，包括开发环境、测试环境和生产环境。
+
+### 配置文件
+
+项目根目录下包含以下环境配置文件：
+
+- `.env.example` - 配置示例文件，包含所有可配置项
+- `.env.development` - 开发环境配置
+- `.env.test` - 测试环境配置 
+- `.env.production` - 生产环境配置
+
+### 环境变量设置
+
+每个环境配置文件中包含以下核心配置：
+
+```env
+# 基础配置
+NODE_ENV=development|test|production  # 环境名称
+PORT=3000                             # 服务端口
+API_PREFIX=/api/v1                    # API前缀
+LOG_LEVEL=debug|info|error            # 日志级别
+ENABLE_SWAGGER=true|false             # 是否启用Swagger文档
+
+# 数据库配置（MySQL示例）
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_USER=root
+MYSQL_PASSWORD=password
+MYSQL_DATABASE=webserver_dev|webserver_test|webserver_prod
+
+# Redis配置
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=
+REDIS_DB=0
+```
+
+## 启动服务
+
+项目提供多种启动方式，以适应不同环境和需求。
+
+### 开发环境
+
+```bash
+# 标准开发模式（带热重载）
+npm run dev
+
+# 直接启动开发环境（不带热重载）
+npm run start:dev
+
+# 调试模式
+npm run debug
+
+# 开发环境集群模式
+npm run cluster:dev
+```
+
+### 测试环境
+
+```bash
+# 启动测试环境
+npm run start:test
+
+# 测试环境调试模式
+npm run debug:test
+
+# 测试环境集群模式
+npm run cluster:test
+
+# 运行单元测试
+npm test
+
+# 带覆盖率的单元测试
+npm run test:coverage
+```
+
+### 生产环境
+
+```bash
+# 构建生产环境代码
+npm run build:prod
+
+# 启动生产环境（PM2集群模式）
+npm start
 ```
 
 ## 项目结构
@@ -42,8 +130,12 @@ src/
 ├── services/        # 业务逻辑层
 ├── utils/           # 工具函数
 ├── config/          # 配置文件
+│   ├── index.js     # 配置入口
+│   ├── development.js # 开发环境配置
+│   ├── test.js      # 测试环境配置
+│   └── production.js # 生产环境配置
 ├── constants/       # 全局常量
-└── app.js           # 应用入口
+└── index.js         # 应用入口
 
 public/              # 静态资源
 tests/               # 测试文件
@@ -84,7 +176,7 @@ docker/              # Docker配置
 
 ### 数据库配置
 
-在`.env`文件中配置数据库信息，支持多种数据库类型：
+在相应环境的`.env`文件中配置数据库信息：
 
 ```env
 # MySQL配置
@@ -131,7 +223,7 @@ REDIS_PASSWORD=
 // src/routes/api/users.js
 const express = require('express');
 const router = express.Router();
-const userService = require('../../services/userService');
+const userService = require('../../services/sysUserService');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -172,22 +264,6 @@ module.exports = (req, res, next) => {
 ```
 
 ## 部署
-
-### 开发环境
-
-```bash
-npm run dev
-```
-
-### 生产环境
-
-```bash
-# 构建
-npm run build
-
-# 启动（PM2集群模式）
-npm start
-```
 
 ### Docker部署
 
@@ -247,23 +323,14 @@ router.get('/', authenticate, async (req, res, next) => {
 });
 ```
 
-### 环境变量配置
-
-在`.env`文件中配置Swagger相关选项：
-
-```env
-# 启用Swagger文档（生产环境）
-ENABLE_SWAGGER=true
-
-# API前缀
-API_PREFIX=/api/v1
-```
-
 ## 测试
 
 ```bash
-# 运行单元测试
+# 运行所有测试
 npm test
+
+# 运行带覆盖率的测试
+npm run test:coverage
 
 # 运行特定测试
 npm test -- tests/api/users.test.js

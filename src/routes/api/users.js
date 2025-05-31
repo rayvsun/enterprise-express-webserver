@@ -3,7 +3,7 @@
  */
 const express = require('express');
 const router = express.Router();
-const userService = require('../../services/userService');
+const userService = require('../../services/sysUserService');
 const { asyncHandler } = require('../../middleware/generic/errorHandler');
 const { authenticate, hasRole } = require('../../middleware/auth/jwtAuth');
 const { USER_ROLES } = require('../../constants/business');
