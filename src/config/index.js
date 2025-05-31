@@ -17,4 +17,4 @@ try {
   config = require('./development');
 }
 
-module.exports = config; 
+module.exports = config;

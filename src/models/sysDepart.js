@@ -144,16 +144,16 @@ module.exports = sequelize => {
         {
           unique: true,
           fields: ['org_code'],
-          name: 'uniq_depart_org_code'
+          name: 'uniq_depart_org_code',
         },
         {
           fields: ['parent_id'],
-          name: 'idx_sd_parent_id'
+          name: 'idx_sd_parent_id',
         },
         {
           fields: ['depart_order'],
-          name: 'idx_sd_depart_order'
-        }
+          name: 'idx_sd_depart_order',
+        },
       ],
     }
   );
@@ -169,21 +169,21 @@ module.exports = sequelize => {
         through: models.UserDepart,
         foreignKey: 'dep_id',
         otherKey: 'user_id',
-        as: 'users'
+        as: 'users',
       });
     }
-    
+
     // 部门自关联（父子关系）
     Depart.hasMany(Depart, {
       foreignKey: 'parent_id',
-      as: 'children'
+      as: 'children',
     });
-    
+
     Depart.belongsTo(Depart, {
       foreignKey: 'parent_id',
-      as: 'parent'
+      as: 'parent',
     });
   };
 
   return Depart;
-}; 
+};

@@ -52,7 +52,7 @@ class RedisClient {
       });
 
       // 监听错误事件
-      this.client.on('error', (error) => {
+      this.client.on('error', error => {
         this.isConnected = false;
         logger.error('Redis 连接错误', { error: error.message });
         this.retryConnection();
@@ -212,10 +212,10 @@ class RedisClient {
     try {
       await this.ensureConnection();
       const lockKey = `${CACHE_PREFIXES.LOCK}${lockName}`;
-      
+
       // 使用NX选项，只在键不存在时设置
       const result = await this.client.set(lockKey, Date.now(), 'EX', ttl, 'NX');
-      
+
       return result === 'OK';
     } catch (error) {
       logger.error('Redis 获取锁失败', { lockName, error: error.message });
@@ -262,4 +262,4 @@ const redisClient = new RedisClient();
   }
 })();
 
-module.exports = redisClient; 
+module.exports = redisClient;

@@ -162,35 +162,35 @@ module.exports = sequelize => {
         {
           unique: true,
           fields: ['work_no'],
-          name: 'uniq_sys_user_work_no'
+          name: 'uniq_sys_user_work_no',
         },
         {
           unique: true,
           fields: ['username'],
-          name: 'uniq_sys_user_username'
+          name: 'uniq_sys_user_username',
         },
         {
           unique: true,
           fields: ['phone'],
-          name: 'uniq_sys_user_phone'
+          name: 'uniq_sys_user_phone',
         },
         {
           unique: true,
           fields: ['email'],
-          name: 'uniq_sys_user_email'
+          name: 'uniq_sys_user_email',
         },
         {
           fields: ['status'],
-          name: 'idx_su_status'
+          name: 'idx_su_status',
         },
         {
           fields: ['del_flag'],
-          name: 'idx_su_del_flag'
+          name: 'idx_su_del_flag',
         },
         {
           fields: ['username', 'del_flag'],
-          name: 'idx_su_del_username'
-        }
+          name: 'idx_su_del_username',
+        },
       ],
       hooks: {
         // 保存前对密码进行哈希处理
@@ -282,17 +282,17 @@ module.exports = sequelize => {
         through: models.UserRole,
         foreignKey: 'user_id',
         otherKey: 'role_id',
-        as: 'roles'
+        as: 'roles',
       });
     }
-    
+
     // 用户和部门多对多关系
     if (models.Depart) {
       User.belongsToMany(models.Depart, {
         through: models.UserDepart,
         foreignKey: 'user_id',
         otherKey: 'dep_id',
-        as: 'departs'
+        as: 'departs',
       });
     }
   };

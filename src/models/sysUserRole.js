@@ -54,4 +54,4 @@ module.exports = sequelize => {
   );
 
   return UserRole;
-}; 
+};

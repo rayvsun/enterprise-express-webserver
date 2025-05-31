@@ -199,10 +199,7 @@ const swaggerDefinition = {
 const swaggerOptions = {
   swaggerDefinition,
   // 扫描所有包含Swagger注释的路由文件
-  apis: [
-    path.join(__dirname, '../routes/api/**/*.js'),
-    path.join(__dirname, '../models/**/*.js'),
-  ],
+  apis: [path.join(__dirname, '../routes/api/**/*.js'), path.join(__dirname, '../models/**/*.js')],
 };
 
 // 生成Swagger规范
@@ -214,21 +211,25 @@ const swaggerSpec = swaggerJSDoc(swaggerOptions);
  */
 function setupSwagger(app) {
   const apiPrefix = process.env.API_PREFIX || '/api/v1';
-  
+
   // Swagger UI路由
-  app.use(`${apiPrefix}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
-    explorer: true,
-    customCss: '.swagger-ui .topbar { display: none }',
-    customSiteTitle: 'Express企业级Web服务器API文档',
-  }));
-  
+  app.use(
+    `${apiPrefix}/docs`,
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec, {
+      explorer: true,
+      customCss: '.swagger-ui .topbar { display: none }',
+      customSiteTitle: 'Express企业级Web服务器API文档',
+    })
+  );
+
   // 提供swagger.json端点
   app.get(`${apiPrefix}/docs.json`, (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(swaggerSpec);
   });
-  
+
   console.log(`Swagger文档已启用: ${apiPrefix}/docs`);
 }
 
-module.exports = setupSwagger; 
+module.exports = setupSwagger;

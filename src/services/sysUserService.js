@@ -136,7 +136,8 @@ class SysUserService {
       }
 
       // 检查账户状态
-      if (user.status !== 1) { // 1-正常
+      if (user.status !== 1) {
+        // 1-正常
         throw new ApiError(statusCodes.FORBIDDEN, '账户未激活或已被禁用', 'AUTH_ACCOUNT_INACTIVE');
       }
 
@@ -180,7 +181,7 @@ class SysUserService {
         ...user.toJSON(),
         permissions: perms,
       });
-      
+
       await redisClient.set(`${CACHE_PREFIXES.USER}${user.id}`, JSON.stringify(userCache), CACHE_TTL.LONG);
 
       return {
@@ -219,10 +220,10 @@ class SysUserService {
           userModel.update_time = new Date(); // 更新时间作为最后登出时间
           await userModel.save();
         }
-        
+
         // 删除用户缓存
         await redisClient.delete(`${CACHE_PREFIXES.USER}${user.id}`);
-        
+
         // 记录审计日志
         logger.audit(user.id, 'logout', 'user', { id: user.id, username: user.username });
       }
@@ -595,4 +596,4 @@ class SysUserService {
   }
 }
 
-module.exports = new SysUserService(); 
+module.exports = new SysUserService();

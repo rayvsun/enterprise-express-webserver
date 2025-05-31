@@ -22,7 +22,7 @@ const server = http.createServer(app);
 if (process.env.CLUSTER_ENABLED === 'true' && cluster.isMaster) {
   // 获取工作进程数量
   const numWorkers = Number(process.env.CLUSTER_WORKERS) || os.cpus().length;
-  
+
   logger.info(`主进程 ${process.pid} 正在运行`);
   logger.info(`启动 ${numWorkers} 个工作进程...`);
 
@@ -43,7 +43,7 @@ if (process.env.CLUSTER_ENABLED === 'true' && cluster.isMaster) {
   server.listen(port);
 
   // 错误处理
-  server.on('error', (error) => {
+  server.on('error', error => {
     if (error.syscall !== 'listen') {
       throw error;
     }
@@ -70,7 +70,7 @@ if (process.env.CLUSTER_ENABLED === 'true' && cluster.isMaster) {
     const addr = server.address();
     const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
     logger.info(`服务器监听在 ${bind} (${process.env.NODE_ENV || 'development'} 环境)`);
-    
+
     if (process.env.NODE_ENV === 'development') {
       logger.info(`API文档地址: http://localhost:${port}${process.env.API_PREFIX}/docs`);
     }
@@ -78,7 +78,7 @@ if (process.env.CLUSTER_ENABLED === 'true' && cluster.isMaster) {
 }
 
 // 处理未捕获的异常
-process.on('uncaughtException', (err) => {
+process.on('uncaughtException', err => {
   logger.error('未捕获的异常', err);
   // 在生产环境可能需要优雅地关闭服务器
   if (process.env.NODE_ENV === 'production') {

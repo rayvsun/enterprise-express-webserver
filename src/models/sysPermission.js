@@ -198,13 +198,13 @@ module.exports = sequelize => {
         as: 'roles',
       });
     }
-    
+
     // 权限自关联（父子关系）
     Permission.hasMany(Permission, {
       foreignKey: 'parent_id',
       as: 'children',
     });
-    
+
     Permission.belongsTo(Permission, {
       foreignKey: 'parent_id',
       as: 'parent',
@@ -212,4 +212,4 @@ module.exports = sequelize => {
   };
 
   return Permission;
-}; 
+};

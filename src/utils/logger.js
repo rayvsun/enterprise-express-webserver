@@ -15,12 +15,7 @@ if (!fs.existsSync(logDir)) {
 }
 
 // 自定义格式
-const customFormat = format.combine(
-  format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-  format.errors({ stack: true }),
-  format.splat(),
-  format.json()
-);
+const customFormat = format.combine(format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), format.errors({ stack: true }), format.splat(), format.json());
 
 // 创建日志记录器
 const logger = winston.createLogger({
@@ -75,9 +70,7 @@ if (process.env.NODE_ENV !== 'production') {
         format.colorize(),
         format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
         format.printf(({ timestamp, level, message, ...meta }) => {
-          const metaString = Object.keys(meta).length
-            ? `\n${JSON.stringify(meta, null, 2)}`
-            : '';
+          const metaString = Object.keys(meta).length ? `\n${JSON.stringify(meta, null, 2)}` : '';
           return `${timestamp} [${level}]: ${message}${metaString}`;
         })
       ),
@@ -110,7 +103,7 @@ logger.performance = (operation, duration, metadata = {}) => {
 // 请求日志记录器中间件
 logger.requestLogger = (req, res, next) => {
   const startTime = Date.now();
-  
+
   // 响应完成后记录请求
   res.on('finish', () => {
     const duration = Date.now() - startTime;
@@ -123,16 +116,16 @@ logger.requestLogger = (req, res, next) => {
       userAgent: req.headers['user-agent'],
       userId: req.user?.id || 'anonymous',
     };
-    
+
     const level = res.statusCode >= 400 ? 'warn' : 'http';
     logger.log(level, `HTTP ${req.method} ${req.originalUrl || req.url}`, logData);
-    
+
     // 记录慢请求
     if (duration > 1000) {
       logger.warn(`慢请求: ${duration}ms`, logData);
     }
   });
-  
+
   next();
 };
 
@@ -142,4 +135,4 @@ shortcutMethods.forEach(method => {
   module.exports[method] = (...args) => logger[method](...args);
 });
 
-module.exports = logger; 
+module.exports = logger;
